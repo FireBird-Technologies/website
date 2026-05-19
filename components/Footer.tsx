@@ -39,7 +39,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-white/30 text-sm leading-relaxed max-w-[180px]">
-              AI SaaS & bespoke solutions. Built in Singapore.
+              AI SaaS & bespoke solutions.
             </p>
             <p className="text-[#FF2000] text-xs font-bold tracking-[0.25em] uppercase mt-4">
               AI . Tech . Fire
