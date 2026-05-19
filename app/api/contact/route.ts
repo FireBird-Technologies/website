@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
 
     await resend.emails.send({
-      from: "FireBird Contact <onboarding@resend.dev>",
+      from: "FireBird Contact <sales@firebird-technologies.com>",
       to: "arslan@firebird-technologies.com",
       replyTo: email,
       subject: `New contact from ${name}${company ? ` (${company})` : ""}`,
@@ -25,7 +25,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ message: "Message received" }, { status: 201 });
-  } catch {
-    return NextResponse.json({ error: "Failed to send message" }, { status: 500 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: "Failed to send message", detail: message }, { status: 500 });
   }
 }
