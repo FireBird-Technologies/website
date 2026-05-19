@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { subscribeEmail } from "@/lib/posts";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,11 +11,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Valid email required" }, { status: 400 });
     }
 
-    const result = subscribeEmail(email);
-
-    if (result.already) {
-      return NextResponse.json({ message: "Already subscribed" });
-    }
+    await resend.emails.send({
+      from: "FireBird Contact <sales@firebird-technologies.com>",
+      to: "arslan@firebird-technologies.com",
+      subject: "New Newsletter Subscriber",
+      text: `New subscriber: ${email}`,
+    });
 
     return NextResponse.json({ message: "Subscribed successfully" }, { status: 201 });
   } catch {
