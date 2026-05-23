@@ -44,13 +44,14 @@ function readPost(filename: string, index: number): Post | null {
 export function getAllPosts(): Post[] {
   if (!fs.existsSync(POSTS_DIR)) return [];
 
-  return fs
+  const posts = fs
     .readdirSync(POSTS_DIR)
     .filter((f) => f.endsWith(".md"))
-    .sort()
-    .reverse()
     .map((f, i) => readPost(f, i))
-    .filter((p): p is Post => p !== null);
+    .filter((p): p is Post => p !== null)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+  return posts.map((p, i) => ({ ...p, id: i + 1 }));
 }
 
 export function getPostBySlug(slug: string): Post | null {

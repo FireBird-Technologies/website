@@ -58,9 +58,28 @@ export default async function PostPage({ params }: Props) {
             <h1 className="text-white text-4xl md:text-5xl font-bold font-[family-name:var(--font-heading)] leading-tight tracking-tight mb-6">
               {post.title}
             </h1>
+            {post.excerpt && (
+              <p className="text-white/60 text-lg leading-relaxed mb-6 max-w-2xl">
+                {post.excerpt}
+              </p>
+            )}
             <p className="text-white/40 text-sm">{formatDate(post.created_at)}</p>
           </div>
         </div>
+
+        {/* Cover image */}
+        {post.cover_image && (
+          <div className="bg-[#0a0a0a]">
+            <div className="max-w-5xl mx-auto px-6 pb-2 -mt-10 relative z-10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={post.cover_image}
+                alt={post.title}
+                className="w-full h-auto border border-white/10 shadow-2xl"
+              />
+            </div>
+          </div>
+        )}
 
         {/* Post body */}
         <div className="max-w-3xl mx-auto px-6 py-16">

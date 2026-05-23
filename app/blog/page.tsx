@@ -107,30 +107,43 @@ export default function BlogPage() {
                   <Link
                     key={post.slug}
                     href={`/blog/${post.slug}`}
-                    className={`group block p-8 hover:bg-[#f9f9f9] transition-colors border-black/10
+                    className={`group flex flex-col hover:bg-[#f9f9f9] transition-colors border-black/10
                       ${col < 2 ? "border-r" : ""}
                       ${row < totalRows - 1 ? "border-b" : ""}
                     `}
                   >
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {post.tags.slice(0, 2).map((tag) => (
-                        <Badge
-                          key={tag}
-                          className="bg-transparent text-[#FF2000] border border-[#FF2000]/30 text-xs font-bold rounded-none px-2 py-0.5 uppercase tracking-widest"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <h2 className="font-bold text-lg leading-snug font-[family-name:var(--font-heading)] mb-3 group-hover:text-[#FF2000] transition-colors">
-                      {post.title}
-                    </h2>
-                    <p className="text-black/50 text-sm leading-relaxed mb-6 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-black/25 text-xs">{formatDate(post.created_at)}</span>
-                      <ArrowRight className="h-4 w-4 text-[#FF2000] group-hover:translate-x-1 transition-transform" />
+                    {post.cover_image && (
+                      <div className="aspect-[16/9] overflow-hidden bg-[#f5f5f5] border-b border-black/10">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={post.cover_image}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 flex flex-col p-8">
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {post.tags.slice(0, 2).map((tag) => (
+                          <Badge
+                            key={tag}
+                            className="bg-transparent text-[#FF2000] border border-[#FF2000]/30 text-xs font-bold rounded-none px-2 py-0.5 uppercase tracking-widest"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                      <h2 className="font-bold text-lg leading-snug font-[family-name:var(--font-heading)] mb-3 group-hover:text-[#FF2000] transition-colors">
+                        {post.title}
+                      </h2>
+                      <p className="text-black/50 text-sm leading-relaxed mb-6 line-clamp-3 flex-1">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-black/25 text-xs">{formatDate(post.created_at)}</span>
+                        <ArrowRight className="h-4 w-4 text-[#FF2000] group-hover:translate-x-1 transition-transform" />
+                      </div>
                     </div>
                   </Link>
                 );
