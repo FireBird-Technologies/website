@@ -80,10 +80,10 @@ export function Hero() {
           {/* Stats row */}
           <div className="mt-20 flex flex-wrap gap-12 border-t border-white/10 pt-10">
             {[
-              { value: "2024", label: "Founded" },
-              { value: "10+", label: "AI Projects Delivered" },
+              { value: "2023", label: "Founded" },
+              { value: "20+", label: "AI Projects Delivered" },
               { value: "2", label: "Live Products" },
-              { value: "MIT", label: "Open Source License" },
+              { value: "2×", label: "Awards & Recognition" },
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="text-white text-3xl font-bold font-[family-name:var(--font-heading)]">

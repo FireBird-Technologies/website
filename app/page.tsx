@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { Products } from "@/components/Products";
+import { Recognition } from "@/components/Recognition";
 import { Services } from "@/components/Services";
 import { ContactForm } from "@/components/ContactForm";
 import { BlogPreview } from "@/components/BlogPreview";
@@ -18,6 +19,7 @@ export default function Home() {
       <main>
         <Hero />
         <Products />
+        <Recognition />
         <Services />
         <ContactForm />
         <BlogPreview posts={posts} />

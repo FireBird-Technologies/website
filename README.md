@@ -2,11 +2,15 @@
 
 # FireBird Technologies — Website
 
-**FireBird Technologies** is an AI SaaS and consulting company founded in 2024 and based in Singapore. We build AI agents, LLM applications, and bespoke software solutions for businesses.
+**FireBird Technologies** is an AI SaaS and consulting company founded in 2023 and based in Singapore. We've delivered 20+ AI projects and build AI agents, LLM applications, and bespoke software solutions for businesses.
 
 **Products:**
 - [AutoAnalyst](https://www.firebird-technologies.com/#products) — Open-source AI-powered data analytics platform
 - [Blog2Video](https://www.firebird-technologies.com/#products) — AI tool that converts written content into video
+
+**Recognition:**
+- Selected for the Z.ai Startup Program (2026)
+- Cognition OpenSource Award recipient
 
 **Website:** [firebird-technologies.com](https://www.firebird-technologies.com)
 
