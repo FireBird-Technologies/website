@@ -32,8 +32,6 @@ It has the following portions:
 
 For a recap on the design of the system:
 
-## 
-
 ## Preparing Data
 
 The dataset is made up of python code execution runs done through our product. The auto-analyst is an AI system with multiple parts, each designed for a specific coding job. One part, the pre-processing agent, cleans and prepares the data using pandas. Another part, the data visualization agent, creates charts and graphs using plotly.

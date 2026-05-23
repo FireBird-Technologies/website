@@ -99,11 +99,7 @@ As an AI engineer, I am probably not the target user for Lovable. It is mostly a
 
 Check out my projects:
 
-[## Building SQL trainer AI’s backend — A full walkthrough](https://www.firebird-technologies.com/p/building-sql-trainer-ais-backend)[Arslan Shahid](https://substack.com/profile/35197593-arslan-shahid)·27 July 2025[![Building SQL trainer AI’s backend — A full walkthrough](./Honest review of Lovable from an AI engineer_files/ef1458cc-fd72-4f61-8c86-077e78363f03_1350x759.jpg)](https://www.firebird-technologies.com/p/building-sql-trainer-ais-backend)
-
-At FirebirdTech, We believe in transparency and openness; we love to show how we build our projects. Carrying on with that spirit, we have recently launched the AI SQL Trainer in beta. This blog post shows how the backend of the application works.
-
-[Read full story](https://www.firebird-technologies.com/p/building-sql-trainer-ais-backend)
+<div class="post-embed"><a class="post-embed-link" href="/p/building-sql-trainer-ais-backend"><div class="post-embed-image"><img alt="Building SQL trainer AI’s backend — A full walkthrough" loading="lazy" src="https://substack-post-media.s3.amazonaws.com/public/images/ef1458cc-fd72-4f61-8c86-077e78363f03_1350x759.png"/></div><div class="post-embed-body"><p class="post-embed-meta">Arslan Shahid · 27 July 2025</p><h4 class="post-embed-title">Building SQL trainer AI’s backend — A full walkthrough</h4><p class="post-embed-description">At FirebirdTech, We believe in transparency and openness; we love to show how we build our projects. Carrying on with that spirit, we have recently launched the AI SQL Trainer in beta. This blog post shows how the backend of the application works.</p></div></a></div>
 
 ## Recommendation
 
@@ -119,10 +115,6 @@ Thank you for reading!
 <div class="cta-inline">
 <a class="cta-button cta-primary" href="https://lovable.dev/?via=arslan" target="_blank" rel="noopener noreferrer">Try Lovable →</a>
 </div>
-
-## 
-
-###
 
 
 ---

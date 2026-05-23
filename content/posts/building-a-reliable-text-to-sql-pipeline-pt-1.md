@@ -13,8 +13,6 @@ published: true
 original_url: "https://firebirdtech.substack.com/p/building-a-reliable-text-to-sql-pipeline"
 ---
 
-### 
-
 Many of our clients are asking for text-to-SQL solutions these days, and it’s become a key part of nearly every project we’ve worked on in the last quarter. While it’s easy to get a language model to generate SQL queries, building a reliable system for enterprise use is a different story. For business-critical applications, we need a high level of accuracy — ideally, over 95% on the first try.
 
 In this blog post, I’ll show you how to build a robust text-to-SQL pipeline from the ground up. And if you’re short on time, I’ll also introduce you to some open-source tools like Vanna.AI that can help speed things up.

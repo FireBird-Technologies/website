@@ -105,8 +105,10 @@ export default async function PostPage({ params }: Props) {
                     </code>
                   );
                 },
-                // Video embed via img tag with video src
-                p({ children }) {
+                // Video embed via img tag with video src; forward className
+                // so inline HTML classes (e.g. .post-embed-meta) survive
+                // react-markdown's render pass.
+                p({ children, className }) {
                   const child = Array.isArray(children) ? children[0] : children;
                   if (typeof child === "string" && child.startsWith("{{video:")) {
                     const url = child.slice(8, -2);
@@ -122,7 +124,7 @@ export default async function PostPage({ params }: Props) {
                       </div>
                     );
                   }
-                  return <p>{children}</p>;
+                  return <p className={className}>{children}</p>;
                 },
               }}
             >
