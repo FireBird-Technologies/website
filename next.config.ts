@@ -24,6 +24,8 @@ const SUBSTACK_SLUG_MAP: Record<string, string> = {
     "kpai-a-new-way-to-look-at-business-metrics",
   "building-production-ready-ai-agents":
     "building-production-ready-ai-agents-llm-programs-with-dspy",
+  "how-to-improve-ai-agents-using-dspy":
+    "how-to-improve-ai-agents-using-dspy",
 };
 
 const nextConfig: NextConfig = {

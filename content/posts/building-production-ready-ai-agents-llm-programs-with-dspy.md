@@ -20,6 +20,8 @@ In this blog, I share what I’ve learned — from hands-on experience to in
   
 If you find this helpful, follow me and Firebird Technologies for more content like this!
 
+**[How to make more reliable reports using AI - A Technical Guide](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)***[Technical guide, sharing my experience of working with AI](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)*[www.firebird-technologies.com](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)
+
 ### Reliable Output
 
 The biggest challenge for developers using LLMs is achieving structured and consistent outputs. Getting your agent to work is one thing, but ensuring 95%+ reliability is another. End users expect good results every time — they don’t care if LLMs are prone to hallucinations, inconsistencies, or occasional erratic behavior.

@@ -1,12 +1,8 @@
-// Generates firebird wireframe GIFs by rasterizing SVG frames and encoding
-// them with gifenc. Matches the hero animation: lines draw in, hold,
-// dissolve, then redraw in a seamless loop.
+// Generates firebird wireframe GIFs matching the hero CSS animations:
+//   firebird-entrance — staggered draw-in (1s ease-out per path)
+//   firebird-draw     — hold → dissolve → redraw loop (6s ease-in-out)
 //
 // Run: npm run gen:firebird-gif
-//
-// Outputs:
-//   public/firebird-wireframe.gif          (800px — web / OG)
-//   public/firebird-wireframe-hd.gif       (1200px — LinkedIn, decks, etc.)
 
 import { Resvg } from "@resvg/resvg-js";
 import gifenc from "gifenc";
@@ -20,7 +16,10 @@ const PUBLIC_DIR = resolve(__dirname, "..", "public");
 
 const RED = "#FF2000";
 const BG = "#000000";
+const MIRROR_AXIS = 74.9;
+const MIRROR_TRANSFORM = `translate(${MIRROR_AXIS * 2}, 0) scale(-1, 1)`;
 
+// Same paths as FirebirdLogoAnimated.tsx (right wing only; left = mirror transform).
 const rightWingPaths = [
   { tag: "polygon", points: "85 27.3 85 35.5 85.3 35.5 100.6 20.4 100.6 35 110.5 35 110.9 34.8 110.9 2.7" },
   { tag: "polygon", points: "116.1 40.6 116.1 49.3 130.6 49.6 115.9 64.7 123.5 65.5 148.1 39.6 116.4 39.6" },
@@ -38,68 +37,101 @@ const rightWingPaths = [
   { tag: "polyline", points: "85 98.7 120 98.7 130.6 98.7 115.5 83.8 100.5 83.8 100.5 105.1" },
 ];
 
-const MIRROR_AXIS = 74.9;
+const PATH_COUNT = rightWingPaths.length;
 
-function mirrorPoints(points) {
-  return points
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((val, i) => (i % 2 === 0 ? (MIRROR_AXIS * 2 - parseFloat(val)).toFixed(2) : val))
-    .join(" ");
+// Matches FirebirdLogoAnimated / globals.css
+const ENTRANCE_DURATION = 1;
+const ENTRANCE_STAGGER = 0.05;
+const DRAW_DURATION = 6;
+const LOOP_ONSET = 5;
+const LOOP_STAGGER = 0.2;
+
+function easeOut(t) {
+  return 1 - (1 - t) ** 3;
 }
 
-const leftWingPaths = rightWingPaths.map((p) => {
-  if (p.tag === "polygon" || p.tag === "polyline") {
-    return { tag: p.tag, points: mirrorPoints(p.points) };
+function easeInOut(t) {
+  return t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
+
+/** firebird-entrance keyframes */
+function entranceState(localT) {
+  if (localT <= 0) return { dashOffset: 1, opacity: 0 };
+  if (localT >= 1) return { dashOffset: 0, opacity: 1 };
+  const p = easeOut(localT);
+  const opacity = localT < 0.2 ? localT / 0.2 : 1;
+  return { dashOffset: 1 - p, opacity };
+}
+
+/** firebird-draw keyframes (one cycle, t in 0..1) */
+function drawLoopState(t) {
+  if (t <= 0.35) return { dashOffset: 0, opacity: 1 };
+  if (t <= 0.55) {
+    const p = easeInOut((t - 0.35) / 0.2);
+    return { dashOffset: lerp(0, -1, p), opacity: lerp(1, 0, p) };
   }
-  return {
-    tag: "polyline",
-    points:
-      "64.8 35.2 72.5 42.8 72.4 43.6 57.9 57.7 43.1 73 42.5 73.3 41.9 73 34.6 65.5 34.6 40.9 43.4 49.6 55.3 49.6 64.8 50.2",
-  };
-});
+  if (t <= 0.65) return { dashOffset: 1, opacity: 0 };
+  if (t <= 0.85) {
+    const p = easeInOut((t - 0.65) / 0.2);
+    return { dashOffset: lerp(1, 0, p), opacity: lerp(0, 1, p) };
+  }
+  return { dashOffset: 0, opacity: 1 };
+}
 
-const allPaths = [...rightWingPaths, ...leftWingPaths];
+/** Per-path state at timeSec — mirrors hero timing */
+function pathState(pathIndex, timeSec) {
+  const entranceStart = pathIndex * ENTRANCE_STAGGER;
+  const loopStart = LOOP_ONSET + (pathIndex % PATH_COUNT) * LOOP_STAGGER;
 
-function buildSvg(progress, size) {
-  const N = allPaths.length;
-  const stagger = 0.025;
-  const drawWindow = 1 - stagger * (N - 1);
+  if (timeSec < loopStart) {
+    const local = (timeSec - entranceStart) / ENTRANCE_DURATION;
+    return entranceState(local);
+  }
 
-  const paths = allPaths.map((p, i) => {
-    const startAt = i * stagger;
-    const endAt = startAt + drawWindow;
-    const local =
-      progress <= startAt ? 0 : progress >= endAt ? 1 : (progress - startAt) / (endAt - startAt);
-    const dashOffset = 1 - local;
-    const opacity = local < 0.02 ? 0 : 1;
+  const loopT = ((timeSec - loopStart) % DRAW_DURATION) / DRAW_DURATION;
+  return drawLoopState(loopT);
+}
 
-    const common = `pathLength="1" stroke-dasharray="1" stroke-dashoffset="${dashOffset.toFixed(
-      3
-    )}" opacity="${opacity}"`;
+function pathElement(p, dashOffset, opacity) {
+  const common = `pathLength="1" stroke-dasharray="1" stroke-dashoffset="${dashOffset.toFixed(4)}" opacity="${opacity.toFixed(4)}"`;
+  if (p.tag === "polygon") return `<polygon points="${p.points}" ${common} />`;
+  if (p.tag === "polyline") return `<polyline points="${p.points}" ${common} />`;
+  return `<path d="${p.d}" ${common} />`;
+}
 
-    if (p.tag === "polygon") return `<polygon points="${p.points}" ${common} />`;
-    if (p.tag === "polyline") return `<polyline points="${p.points}" ${common} />`;
-    return `<path d="${p.d}" ${common} />`;
-  });
+function wingGroup(timeSec) {
+  return rightWingPaths
+    .map((p, i) => {
+      const { dashOffset, opacity } = pathState(i, timeSec);
+      return pathElement(p, dashOffset, opacity);
+    })
+    .join("\n      ");
+}
 
-  // Soft red glow behind the bird (matches hero aesthetic)
-  const glow = `
-    <defs>
-      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="${RED}" stop-opacity="0.18"/>
-        <stop offset="100%" stop-color="${RED}" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    <ellipse cx="75" cy="74.5" rx="70" ry="68" fill="url(#glow)"/>
-  `;
+function buildSvg(timeSec, size) {
+  const right = wingGroup(timeSec);
+  const left = wingGroup(timeSec);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 149" width="${size}" height="${size}">
   <rect width="100%" height="100%" fill="${BG}" />
-  ${glow}
-  <g fill="none" stroke="${RED}" stroke-width="0.55" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10">
-    ${paths.join("\n    ")}
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${RED}" stop-opacity="0.10"/>
+      <stop offset="70%" stop-color="${RED}" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="${RED}" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="75" cy="74.5" rx="72" ry="70" fill="url(#glow)"/>
+  <g fill="none" stroke="${RED}" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10">
+    ${right}
+  </g>
+  <g transform="${MIRROR_TRANSFORM}" fill="none" stroke="${RED}" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10">
+    ${left}
   </g>
 </svg>`;
 }
@@ -114,34 +146,19 @@ function svgToRgba(svgString, size) {
 }
 
 function encodeGif({ size, outPath, fps, paletteSize }) {
-  const holdFrames = Math.round(0.3 * fps); // brief black before draw
-  const drawFrames = Math.round(2.0 * fps);
-  const dissolveFrames = Math.round(0.8 * fps);
-  const redrawFrames = Math.round(1.5 * fps);
-  const tailFrames = Math.round(0.5 * fps);
-  const totalFrames = holdFrames + drawFrames + Math.round(1.0 * fps) + dissolveFrames + redrawFrames + tailFrames;
+  // One full hero-like cycle: entrance completes by ~1.7s, loops begin at 5s,
+  // capture through 11s so every path completes at least one draw loop.
+  const totalDuration = LOOP_ONSET + DRAW_DURATION + LOOP_STAGGER * (PATH_COUNT - 1) + 0.5;
+  const totalFrames = Math.ceil(totalDuration * fps);
 
   console.log(`\n→ ${outPath}`);
-  console.log(`  ${totalFrames} frames @ ${fps}fps, ${size}px, ${paletteSize}-color palette`);
+  console.log(`  ${totalFrames} frames @ ${fps}fps (${totalDuration.toFixed(1)}s), ${size}px`);
 
   const gif = GIFEncoder();
 
   for (let f = 0; f < totalFrames; f++) {
-    const holdEnd = holdFrames;
-    const drawEnd = holdEnd + drawFrames;
-    const holdDrawEnd = drawEnd + Math.round(1.0 * fps);
-    const dissolveEnd = holdDrawEnd + dissolveFrames;
-    const redrawEnd = dissolveEnd + redrawFrames;
-
-    let progress;
-    if (f < holdEnd) progress = 0;
-    else if (f < drawEnd) progress = (f - holdEnd) / (drawFrames - 1);
-    else if (f < holdDrawEnd) progress = 1;
-    else if (f < dissolveEnd) progress = 1 - (f - holdDrawEnd) / (dissolveFrames - 1);
-    else if (f < redrawEnd) progress = (f - dissolveEnd) / (redrawFrames - 1);
-    else progress = 1;
-
-    const svgString = buildSvg(progress, size);
+    const timeSec = f / fps;
+    const svgString = buildSvg(timeSec, size);
     const { pixels, width, height } = svgToRgba(svgString, size);
 
     const palette = quantize(pixels, paletteSize, { format: "rgba4444" });
@@ -152,44 +169,38 @@ function encodeGif({ size, outPath, fps, paletteSize }) {
       delay: Math.round(1000 / fps),
     });
 
-    if ((f + 1) % 12 === 0) process.stdout.write(`  frame ${f + 1}/${totalFrames}\r`);
+    if ((f + 1) % 15 === 0 || f + 1 === totalFrames) {
+      process.stdout.write(`  frame ${f + 1}/${totalFrames}\r`);
+    }
   }
 
   gif.finish();
   const bytes = gif.bytes();
   writeFileSync(outPath, bytes);
   console.log(`  done — ${(bytes.length / 1024).toFixed(1)} KB`);
-  return outPath;
 }
 
 function main() {
   mkdirSync(PUBLIC_DIR, { recursive: true });
 
   const outputs = [
-    { size: 800, outPath: resolve(PUBLIC_DIR, "firebird-wireframe.gif"), fps: 24, paletteSize: 32 },
-    { size: 1200, outPath: resolve(PUBLIC_DIR, "firebird-wireframe-hd.gif"), fps: 24, paletteSize: 48 },
+    { size: 800, outPath: resolve(PUBLIC_DIR, "firebird-wireframe.gif"), fps: 12, paletteSize: 24 },
+    { size: 1200, outPath: resolve(PUBLIC_DIR, "firebird-wireframe-hd.gif"), fps: 15, paletteSize: 48 },
   ];
 
-  // Also drop HD copy in project videos/ folder for easy access
   const videosDir = resolve(__dirname, "..", "..", "videos");
   mkdirSync(videosDir, { recursive: true });
 
-  console.log("Generating firebird wireframe GIFs…");
+  console.log("Generating firebird wireframe GIFs (hero-matched animation)…");
 
   for (const cfg of outputs) {
     encodeGif(cfg);
   }
 
-  // Copy HD version to videos folder
   const hdSrc = resolve(PUBLIC_DIR, "firebird-wireframe-hd.gif");
   const hdDest = resolve(videosDir, "firebird-wireframe.gif");
-  const hdBytes = readFileSync(hdSrc);
-  writeFileSync(hdDest, hdBytes);
+  writeFileSync(hdDest, readFileSync(hdSrc));
   console.log(`\nCopied HD GIF → ${hdDest}`);
-  console.log("\nUse these files:");
-  console.log("  website/public/firebird-wireframe.gif     (800px, web)");
-  console.log("  website/public/firebird-wireframe-hd.gif  (1200px, social/decks)");
-  console.log("  videos/firebird-wireframe.gif             (1200px copy)");
 }
 
 main();
