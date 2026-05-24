@@ -51,10 +51,20 @@ export function Hero() {
             <span className="text-[#FF2000]">Scale.</span>
           </h1>
 
-          <p className="text-white/60 text-lg md:text-xl leading-relaxed mb-12 max-w-xl">
+          <p className="text-white/60 text-lg md:text-xl leading-relaxed mb-8 max-w-xl">
             FireBird Technologies delivers open-source AI analytics software and
             bespoke LLM solutions for companies that move fast and think bigger.
+            We publish research notes and engineering write-ups from production AI
+            systems — agents, RAG, and LLM pipelines in the field.
           </p>
+
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 text-white/50 hover:text-white text-sm font-medium tracking-wide transition-colors mb-12 group"
+          >
+            Read our research &amp; field notes
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
@@ -83,7 +93,7 @@ export function Hero() {
               { value: "2023", label: "Founded" },
               { value: "20+", label: "AI Projects Delivered" },
               { value: "2", label: "Live Products" },
-              { value: "2×", label: "Awards & Recognition" },
+              { value: "$100M+", label: "Partner Firm Revenue" },
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="text-white text-3xl font-bold font-[family-name:var(--font-heading)]">
