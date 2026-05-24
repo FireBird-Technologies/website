@@ -1,36 +1,37 @@
-import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import { NextResponse } from "next/server";
+import { escapeHtml, sendToInbox } from "@/lib/email";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, company, message } = body;
+    const name = typeof body.name === "string" ? body.name.trim() : "";
+    const email = typeof body.email === "string" ? body.email.trim() : "";
+    const company = typeof body.company === "string" ? body.company.trim() : "";
+    const message = typeof body.message === "string" ? body.message.trim() : "";
 
     if (!name || !email || !message) {
-      return NextResponse.json({ error: "name, email, and message are required" }, { status: 400 });
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({ error: "Valid email required" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({ error: "Email service not configured" }, { status: 500 });
-    }
-    const resend = new Resend(apiKey);
-
-    await resend.emails.send({
-      from: "FireBird Contact <sales@firebird-technologies.com>",
-      to: "arslan@firebird-technologies.com",
+    await sendToInbox({
+      subject: `New contact from ${name}`,
       replyTo: email,
-      subject: `New contact from ${name}${company ? ` (${company})` : ""}`,
-      text: `Name: ${name}\nEmail: ${email}\nCompany: ${company ?? "—"}\n\n${message}`,
+      html: `
+        <h2>New contact form submission</h2>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+        <p><strong>Company:</strong> ${escapeHtml(company || "—")}</p>
+        <p><strong>Message:</strong></p>
+        <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>
+      `,
     });
 
-    return NextResponse.json({ message: "Message received" }, { status: 201 });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: "Failed to send message", detail: message }, { status: 500 });
+    return NextResponse.json({ ok: true });
+  } catch {
+    return NextResponse.json({ error: "Failed to send message" }, { status: 500 });
   }
 }

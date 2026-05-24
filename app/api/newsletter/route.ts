@@ -1,29 +1,26 @@
-import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import { NextResponse } from "next/server";
+import { escapeHtml, sendToInbox } from "@/lib/email";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
+    const body = await req.json();
+    const email = typeof body.email === "string" ? body.email.trim() : "";
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({ error: "Valid email required" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({ error: "Email service not configured" }, { status: 500 });
-    }
-    const resend = new Resend(apiKey);
-
-    await resend.emails.send({
-      from: "FireBird Contact <sales@firebird-technologies.com>",
-      to: "arslan@firebird-technologies.com",
-      subject: "New Newsletter Subscriber",
-      text: `New subscriber: ${email}`,
+    await sendToInbox({
+      subject: "New newsletter signup",
+      replyTo: email,
+      html: `
+        <h2>New newsletter signup</h2>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+      `,
     });
 
-    return NextResponse.json({ message: "Subscribed successfully" }, { status: 201 });
+    return NextResponse.json({ ok: true });
   } catch {
-    return NextResponse.json({ error: "Subscription failed" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to subscribe" }, { status: 500 });
   }
 }
