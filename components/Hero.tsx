@@ -67,7 +67,7 @@ export function Hero() {
           className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-medium tracking-wide transition-colors mb-12 group hero-enter"
           style={{ animationDelay: "3.0s" }}
         >
-          Read our research &amp; field notes
+          Read our insights &amp; field notes
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </Link>
 
