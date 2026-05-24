@@ -26,6 +26,10 @@ const SUBSTACK_SLUG_MAP: Record<string, string> = {
     "building-production-ready-ai-agents-llm-programs-with-dspy",
   "how-to-improve-ai-agents-using-dspy":
     "how-to-improve-ai-agents-using-dspy",
+  "how-to-make-more-reliable-reports":
+    "how-to-make-more-reliable-reports-using-ai",
+  "building-sql-trainer-ais-backend":
+    "building-sql-trainer-ais-backend-full-walkthrough",
 };
 
 const nextConfig: NextConfig = {

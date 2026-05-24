@@ -38,7 +38,7 @@ Watch the video version of this post here, made using [https://blog2video.app](h
 > <a class="cta-button cta-primary" href="https://tally.so/r/3x9bgo" target="_blank" rel="noopener noreferrer">Reach out for help →</a>
 > </div>
 
-**[How to make more reliable reports using AI - A Technical Guide](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)***[Technical guide, sharing my experience of working with AI](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)*[www.firebird-technologies.com](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)
+For background on reliable AI outputs, see [How to make more reliable reports using AI](/blog/how-to-make-more-reliable-reports-using-ai).
 
 ### Building a Text-to-SQL agent
 

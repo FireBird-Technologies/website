@@ -20,7 +20,7 @@ In this blog, I share what I’ve learned — from hands-on experience to in
   
 If you find this helpful, follow me and Firebird Technologies for more content like this!
 
-**[How to make more reliable reports using AI - A Technical Guide](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)***[Technical guide, sharing my experience of working with AI](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)*[www.firebird-technologies.com](https://www.firebird-technologies.com/p/how-to-make-more-reliable-reports)
+For related reading, see [How to make more reliable reports using AI](/blog/how-to-make-more-reliable-reports-using-ai).
 
 ### Reliable Output
 

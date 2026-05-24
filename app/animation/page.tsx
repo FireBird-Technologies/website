@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Navbar } from "@/components/Navbar";
 import { HeroAnimation } from "@/components/HeroAnimation";
 
 export const metadata: Metadata = {
@@ -9,8 +10,11 @@ export const metadata: Metadata = {
 
 export default function AnimationPage() {
   return (
-    <main className="min-h-screen bg-black">
-      <HeroAnimation className="min-h-screen w-full" emblemClassName="w-[min(90vw,720px)]" />
-    </main>
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-black">
+        <HeroAnimation className="min-h-screen w-full" emblemClassName="w-[min(90vw,720px)]" />
+      </main>
+    </>
   );
 }
