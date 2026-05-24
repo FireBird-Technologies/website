@@ -183,15 +183,16 @@ export function Testimonials() {
                         />
                       </div>
                     </div>
-                    <div className="flex items-center justify-center gap-6 h-16 px-2">
+                    <div className="flex items-center justify-center gap-6 h-16 px-2 min-w-[140px]">
                       {t.logos.map((logo) => (
-                        <Image
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
                           key={logo.src}
                           src={logo.src}
                           alt={logo.alt}
                           width={logo.width}
                           height={logo.height}
-                          className="max-h-10 w-auto max-w-[120px] object-contain brightness-0 invert opacity-60"
+                          className="max-h-10 w-auto max-w-[140px] object-contain brightness-0 invert opacity-60"
                         />
                       ))}
                     </div>

@@ -1,12 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 165 85">
-<!-- SVG created with Arrow, by QuiverAI (https://quiver.ai) -->
-  <style type="text/css">.cls-0 {fill:#A62136;}
-.cls-1 {fill:#8C8C8C;}</style>
-  <rect class="cls-0" x="1.7" width="16.7" height="85"/>
-  <rect class="cls-0" x="29.5" width="17.9" height="57.6"/>
-  <rect class="cls-0" x="58.9" width="17.7" height="85"/>
-  <rect class="cls-0" x="87.6" width="17.7" height="16.6"/>
-  <rect class="cls-1" x="87.5" y="27.3" width="17.8" height="57.6"/>
-  <rect class="cls-0" x="117.3" width="45.9" height="16.6"/>
-  <rect class="cls-0" x="117.3" y="27.3" width="17.8" height="57.6"/>
+  <rect fill="#A62136" x="1.7" width="16.7" height="85"/>
+  <rect fill="#A62136" x="29.5" width="17.9" height="57.6"/>
+  <rect fill="#A62136" x="58.9" width="17.7" height="85"/>
+  <rect fill="#A62136" x="87.6" width="17.7" height="16.6"/>
+  <rect fill="#8C8C8C" x="87.5" y="27.3" width="17.8" height="57.6"/>
+  <rect fill="#A62136" x="117.3" width="45.9" height="16.6"/>
+  <rect fill="#A62136" x="117.3" y="27.3" width="17.8" height="57.6"/>
 </svg>
