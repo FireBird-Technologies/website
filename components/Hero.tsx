@@ -1,9 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { FirebirdLogoAnimated } from "@/components/FirebirdLogoAnimated";
+import { HeroAnimation } from "@/components/HeroAnimation";
 
 export function Hero() {
   return (
@@ -11,28 +10,7 @@ export function Hero() {
       id="home"
       className="relative min-h-screen bg-black flex items-center overflow-hidden"
     >
-      {/* Background wireframe */}
-      <div className="absolute inset-0 pointer-events-none select-none">
-        <Image
-          src="/wireframe.png"
-          alt=""
-          fill
-          className="object-cover opacity-[0.05] mix-blend-screen"
-          aria-hidden="true"
-          priority
-        />
-      </div>
-
-      {/* Center: animated Firebird wireframe emblem */}
-      <div className="pointer-events-none select-none absolute inset-x-0 top-0 h-[100svh] md:inset-0 md:h-auto">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(88%,720px)] sm:w-[min(70vw,720px)] aspect-square">
-          <div className="absolute inset-0 bg-[#FF2000] opacity-[0.10] blur-3xl rounded-full" />
-          <FirebirdLogoAnimated className="relative block w-full h-full opacity-90" />
-        </div>
-      </div>
-
-      {/* Red top bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-[#FF2000]" />
+      <HeroAnimation className="absolute inset-0" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-16 w-full text-center flex flex-col items-center">
         <p
