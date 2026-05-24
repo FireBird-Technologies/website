@@ -2,7 +2,9 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { Products } from "@/components/Products";
 import { Recognition } from "@/components/Recognition";
+import { ClientsPartners } from "@/components/ClientsPartners";
 import { Services } from "@/components/Services";
+import { Testimonials } from "@/components/Testimonials";
 import { ContactForm } from "@/components/ContactForm";
 import { BlogPreview } from "@/components/BlogPreview";
 import { Footer } from "@/components/Footer";
@@ -18,8 +20,10 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <Products />
+        <ClientsPartners />
+        <Testimonials />
         <Recognition />
+        <Products />
         <Services />
         <ContactForm />
         <BlogPreview posts={posts} />
