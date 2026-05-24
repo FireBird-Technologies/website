@@ -1,4 +1,5 @@
 import { Bot, Code2, Network, Layers } from "lucide-react";
+import { FirebirdHalfLeft } from "@/components/FirebirdLogoAnimated";
 
 const services = [
   {
@@ -33,8 +34,13 @@ const services = [
 
 export function Services() {
   return (
-    <section id="services" className="bg-[#0a0a0a] py-28">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="services" className="relative bg-[#0a0a0a] py-28 overflow-hidden">
+      {/* Decorative red wireframe peeking from the left edge */}
+      <div className="pointer-events-none absolute -left-32 bottom-10 w-[28rem] h-[28rem] opacity-25 select-none">
+        <FirebirdHalfLeft className="w-full h-full" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
         {/* Section header */}
         <div className="mb-16">
           <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">

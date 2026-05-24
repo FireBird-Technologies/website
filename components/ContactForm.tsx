@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ArrowRight, CheckCircle } from "lucide-react";
+import { FirebirdHalfRight } from "@/components/FirebirdLogoAnimated";
 
 export function ContactForm() {
   const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
@@ -32,8 +33,13 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contact" className="bg-white py-28 border-t border-black/10">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="contact" className="relative bg-white py-28 border-t border-black/10 overflow-hidden">
+      {/* Decorative grey wireframe peeking from the right edge */}
+      <div className="pointer-events-none absolute -right-32 top-12 w-[24rem] h-[24rem] opacity-15 select-none">
+        <FirebirdHalfRight className="w-full h-full" stroke="#525252" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-16 items-start">
           {/* Left column */}
           <div>

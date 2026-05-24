@@ -10,6 +10,7 @@ import { Footer } from "@/components/Footer";
 import { ArrowRight, Search } from "lucide-react";
 import type { Post } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
+import { FirebirdHalfLeft } from "@/components/FirebirdLogoAnimated";
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -53,7 +54,13 @@ export default function BlogPage() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="relative max-w-7xl mx-auto px-6 py-12 overflow-hidden">
+          {/* Decorative grey wireframe peeking from the right edge */}
+          <div className="pointer-events-none absolute -right-32 top-32 w-[26rem] h-[26rem] opacity-15 select-none">
+            <FirebirdHalfLeft className="w-full h-full" stroke="#525252" />
+          </div>
+
+          <div className="relative">
           {/* Filters */}
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center mb-12">
             <div className="relative flex-1 max-w-sm">
@@ -150,6 +157,7 @@ export default function BlogPage() {
               })}
             </div>
           )}
+          </div>
         </div>
       </main>
       <Footer />

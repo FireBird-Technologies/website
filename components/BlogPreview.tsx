@@ -10,6 +10,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Post } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
+import { FirebirdHalfRight } from "@/components/FirebirdLogoAnimated";
 
 interface BlogPreviewProps {
   posts: Post[];
@@ -36,8 +37,13 @@ export function BlogPreview({ posts }: BlogPreviewProps) {
   };
 
   return (
-    <section id="blog" className="bg-[#0a0a0a] py-28">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="blog" className="relative bg-[#0a0a0a] py-28 overflow-hidden">
+      {/* Decorative red wireframe peeking from the right edge */}
+      <div className="pointer-events-none absolute -right-32 top-10 w-[26rem] h-[26rem] opacity-25 select-none">
+        <FirebirdHalfRight className="w-full h-full" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className="flex items-end justify-between mb-16">
           <div>

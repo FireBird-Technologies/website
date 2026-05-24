@@ -18,17 +18,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://firebird-technologies.com"),
   title: "FireBird Technologies — AI. Tech. Fire.",
   description:
-    "AI SaaS and services company building open-source AI data analytics software and bespoke solutions for clients.",
-  keywords: ["AI", "LLM", "AI Agents", "Data Analytics", "Singapore", "Tech Consulting"],
+    "Open-source AI analytics and bespoke LLM systems. Engineered for companies that ship.",
+  keywords: [
+    "AI",
+    "LLM",
+    "AI Agents",
+    "RAG",
+    "Data Analytics",
+    "Singapore",
+    "AI Consulting",
+    "Open Source AI",
+  ],
   openGraph: {
-    title: "FireBird Technologies",
-    description: "AI. Tech. Fire.",
+    title: "FireBird Technologies — AI. Tech. Fire.",
+    description:
+      "Open-source AI analytics and bespoke LLM systems. Engineered for companies that ship.",
     url: "https://firebird-technologies.com",
     siteName: "FireBird Technologies",
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FireBird Technologies — AI. Tech. Fire.",
+    description:
+      "Open-source AI analytics and bespoke LLM systems. Engineered for companies that ship.",
   },
 };
 

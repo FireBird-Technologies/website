@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FirebirdHalfLeft } from "@/components/FirebirdLogoAnimated";
 
 const clientLogos = [
   {
@@ -69,10 +70,15 @@ export function ClientsPartners() {
   return (
     <section
       id="clients-partners"
-      className="relative bg-black pt-10 pb-20 -mt-px"
+      className="relative bg-black pt-10 pb-20 -mt-px overflow-hidden"
     >
+      {/* Decorative left-wing wireframe peeking from the left edge */}
+      <div className="pointer-events-none absolute -left-32 top-1/2 -translate-y-1/2 w-[28rem] h-[28rem] opacity-30 select-none">
+        <FirebirdHalfLeft className="w-full h-full" />
+      </div>
+
       {/* Subtle label that ties into the hero */}
-      <div className="max-w-7xl mx-auto px-6 mb-10">
+      <div className="relative max-w-7xl mx-auto px-6 mb-10">
         <div className="flex items-center gap-4">
           <p className="text-white/40 text-[11px] font-bold tracking-[0.3em] uppercase whitespace-nowrap">
             Our Clients &amp; Partner Affiliations

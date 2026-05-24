@@ -2,6 +2,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BarChart3, Brain, Code2, Database, FileText, Layers, Network, TrendingUp, Video, Zap } from "lucide-react";
+import { FirebirdHalfRight } from "@/components/FirebirdLogoAnimated";
 
 const products = [
   {
@@ -46,8 +47,13 @@ const products = [
 
 export function Products() {
   return (
-    <section id="products" className="bg-white py-28">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="products" className="relative bg-white py-28 overflow-hidden">
+      {/* Decorative grey wireframe peeking from the right edge */}
+      <div className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[28rem] h-[28rem] opacity-20 select-none">
+        <FirebirdHalfRight className="w-full h-full" stroke="#525252" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
         <div className="mb-16">
           <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">
             What We Ship

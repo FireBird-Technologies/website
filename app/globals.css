@@ -255,3 +255,46 @@
   .prose .post-embed-image { width: 100%; }
   .prose .post-embed-image img { aspect-ratio: 16 / 9; }
 }
+
+/* Animated firebird wireframe — self-drawing line animation used across the site.
+ *
+ * Two animations work in tandem on each path:
+ *   1. `firebird-entrance` runs once on mount, draws the path in (one-shot).
+ *   2. `firebird-draw` then loops forever, holding the drawn state, dissolving,
+ *      and redrawing. It starts and ends at "drawn" so it daisy-chains cleanly
+ *      onto the entrance's final state.
+ */
+@keyframes firebird-entrance {
+  0%   { stroke-dashoffset: 1; opacity: 0; }
+  20%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes firebird-draw {
+  0%   { stroke-dashoffset: 0;  opacity: 1; }
+  35%  { stroke-dashoffset: 0;  opacity: 1; }
+  55%  { stroke-dashoffset: -1; opacity: 0; }
+  65%  { stroke-dashoffset: 1;  opacity: 0; }
+  85%  { stroke-dashoffset: 0;  opacity: 1; }
+  100% { stroke-dashoffset: 0;  opacity: 1; }
+}
+
+/* Hero entry cascade — used to stagger the hero text appearance after
+ * the firebird wireframe begins drawing itself in. */
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.hero-enter {
+  opacity: 0;
+  animation: hero-enter 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

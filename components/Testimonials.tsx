@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
+import { FirebirdHalfRight } from "@/components/FirebirdLogoAnimated";
 
 type Logo = {
   src: string;
@@ -112,6 +113,11 @@ export function Testimonials() {
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-[#FF2000] opacity-[0.06] blur-3xl rounded-full" />
         <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-[#FF2000] opacity-[0.06] blur-3xl rounded-full" />
+      </div>
+
+      {/* Decorative right-wing wireframe peeking from the right edge */}
+      <div className="pointer-events-none absolute -right-40 top-1/2 -translate-y-1/2 w-[32rem] h-[32rem] opacity-25 select-none">
+        <FirebirdHalfRight className="w-full h-full" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">

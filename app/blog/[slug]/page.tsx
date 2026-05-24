@@ -10,6 +10,7 @@ import { ArrowLeft } from "lucide-react";
 import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
 import { CodeBlock } from "@/components/CodeBlock";
+import { FirebirdHalfLeft } from "@/components/FirebirdLogoAnimated";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -82,8 +83,13 @@ export default async function PostPage({ params }: Props) {
         )}
 
         {/* Post body */}
-        <div className="max-w-3xl mx-auto px-6 py-16">
-          <article className="prose">
+        <div className="relative max-w-3xl mx-auto px-6 py-16">
+          {/* Decorative grey wireframe peeking from the right edge */}
+          <div className="pointer-events-none absolute -right-72 top-24 w-[24rem] h-[24rem] opacity-15 select-none hidden lg:block">
+            <FirebirdHalfLeft className="w-full h-full" stroke="#525252" />
+          </div>
+
+          <article className="prose relative">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeRaw]}

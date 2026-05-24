@@ -1,3 +1,5 @@
+import { FirebirdHalfLeft } from "@/components/FirebirdLogoAnimated";
+
 function ZAiLogo({ className }: { className?: string }) {
   return (
     <svg
@@ -100,8 +102,13 @@ const awards: Award[] = [
 
 export function Recognition() {
   return (
-    <section id="recognition" className="bg-white py-28 border-t border-black/10">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="recognition" className="relative bg-white py-28 border-t border-black/10 overflow-hidden">
+      {/* Decorative grey wireframe peeking from the left edge */}
+      <div className="pointer-events-none absolute -left-40 top-1/3 w-[28rem] h-[28rem] opacity-20 select-none">
+        <FirebirdHalfLeft className="w-full h-full" stroke="#525252" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
         <div className="mb-16">
           <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">
             Awards &amp; Recognition

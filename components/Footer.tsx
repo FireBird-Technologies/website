@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { FirebirdHalfLeft, FirebirdHalfRight } from "@/components/FirebirdLogoAnimated";
 
 const links = {
   Company: [
@@ -21,8 +22,16 @@ const links = {
 
 export function Footer() {
   return (
-    <footer className="bg-black border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-6 py-16">
+    <footer className="relative bg-black border-t border-white/10 overflow-hidden">
+      {/* Decorative wireframe wings flanking the footer */}
+      <div className="pointer-events-none absolute -left-32 -top-20 w-[24rem] h-[24rem] opacity-20 select-none">
+        <FirebirdHalfLeft className="w-full h-full" />
+      </div>
+      <div className="pointer-events-none absolute -right-32 -bottom-20 w-[24rem] h-[24rem] opacity-20 select-none">
+        <FirebirdHalfRight className="w-full h-full" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">

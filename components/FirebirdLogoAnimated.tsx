@@ -1,8 +1,18 @@
 type Props = {
   className?: string;
+  /** Stroke color. Default red brand color. */
+  stroke?: string;
+  /** Animation cycle in seconds. Default 6. */
+  duration?: number;
 };
 
-const wirePaths: { tag: "polygon" | "polyline" | "path"; attrs: Record<string, string> }[] = [
+type WirePath = {
+  tag: "polygon" | "polyline" | "path";
+  attrs: Record<string, string>;
+};
+
+// Right half wireframe paths (from original firebird logo wire SVG).
+const rightWingPaths: WirePath[] = [
   {
     tag: "polygon",
     attrs: {
@@ -68,41 +78,139 @@ const wirePaths: { tag: "polygon" | "polyline" | "path"; attrs: Record<string, s
     tag: "polyline",
     attrs: { points: "85 98.7 120 98.7 130.6 98.7 115.5 83.8 100.5 83.8 100.5 105.1" },
   },
-  // Mirror group (left wing) — mirrored across vertical center (x ≈ 74.9)
-  {
-    tag: "polygon",
-    attrs: {
-      points:
-        "64.8 27.3 64.8 35.5 64.5 35.5 49.2 20.4 49.2 35 39.3 35 38.9 34.8 38.9 2.7",
-    },
-  },
-  {
-    tag: "polygon",
-    attrs: {
-      points: "33.7 40.6 33.7 49.3 19.2 49.6 33.9 64.7 26.3 65.5 1.7 39.6 33.4 39.6",
-    },
-  },
-  {
-    tag: "polygon",
-    attrs: { points: "73.4 43.1 73.4 65 64.2 74.2 42.8 74.2 57.4 59.4 59.9 57.3" },
-  },
-  {
-    tag: "polygon",
-    attrs: { points: "73.4 84.2 73.4 105.2 43 75.2 64.2 75.2" },
-  },
-  {
-    tag: "polygon",
-    attrs: {
-      points: "72.6 105.9 64.8 114 64.8 122 39.2 146.9 39.2 114.8 49.9 104.2 60.7 93.5",
-    },
-  },
-  {
-    tag: "polygon",
-    attrs: { points: "33.9 83.8 26.4 83.8 1.7 109.2 33.6 109.2 33.9 108.8" },
-  },
 ];
 
-export function FirebirdLogoAnimated({ className }: Props) {
+// Left half = right half mirrored across x = 74.9 (vertical center of viewBox).
+const MIRROR_AXIS = 74.9;
+
+function mirrorPoints(points: string): string {
+  return points
+    .split(/\s+/)
+    .filter(Boolean)
+    .reduce<string[]>((acc, val, i) => {
+      const num = parseFloat(val);
+      if (i % 2 === 0) {
+        // x coordinate — mirror it
+        acc.push((MIRROR_AXIS * 2 - num).toFixed(2));
+      } else {
+        acc.push(val);
+      }
+      return acc;
+    }, [])
+    .join(" ");
+}
+
+const leftWingPaths: WirePath[] = rightWingPaths.map((p) => {
+  if (p.tag === "polygon" || p.tag === "polyline") {
+    return { tag: p.tag, attrs: { points: mirrorPoints(p.attrs.points) } };
+  }
+  // For the single path element, hand-mirror by negating x deltas in the M and L commands.
+  // The path uses relative commands which makes pure-text mirroring fragile, so we render a
+  // simplified mirrored polygon that approximates the same beak region on the left side.
+  return {
+    tag: "polyline",
+    attrs: {
+      points:
+        "64.8 35.2 72.5 42.8 72.4 43.6 57.9 57.7 43.1 73 42.5 73.3 41.9 73 34.6 65.5 34.6 40.9 43.4 49.6 55.3 49.6 64.8 50.2",
+    },
+  };
+});
+
+function WirePathsGroup({
+  paths,
+  stroke,
+  duration,
+  startDelay,
+}: {
+  paths: WirePath[];
+  stroke: string;
+  duration: number;
+  startDelay: number;
+}) {
+  // Tight stagger on the entrance so the bird assembles itself in ~1.7s,
+  // then the loop kicks in well after the hero text has settled.
+  const entranceDuration = 1;
+  const entranceStagger = 0.05;
+  const loopOnsetDelay = 5; // when (in seconds) each path's looping cycle begins
+
+  return (
+    <g
+      fill="none"
+      stroke={stroke}
+      strokeWidth="0.6"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {paths.map((p, i) => {
+        const Tag = p.tag;
+        const entranceDelay = startDelay + i * entranceStagger;
+        const loopDelay = loopOnsetDelay + (i % paths.length) * 0.2;
+        return (
+          <Tag
+            key={i}
+            {...p.attrs}
+            pathLength={1}
+            style={{
+              strokeDasharray: 1,
+              strokeDashoffset: 1,
+              animation: `firebird-entrance ${entranceDuration}s ease-out ${entranceDelay}s forwards, firebird-draw ${duration}s ease-in-out ${loopDelay}s infinite`,
+            }}
+          />
+        );
+      })}
+    </g>
+  );
+}
+
+/**
+ * Right half of the firebird wireframe — animated.
+ */
+export function FirebirdHalfRight({
+  className,
+  stroke = "#FF2000",
+  duration = 6,
+}: Props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="74.9 0 75.1 149"
+      className={className}
+      aria-hidden="true"
+    >
+      <WirePathsGroup paths={rightWingPaths} stroke={stroke} duration={duration} startDelay={0} />
+    </svg>
+  );
+}
+
+/**
+ * Left half of the firebird wireframe — animated.
+ */
+export function FirebirdHalfLeft({
+  className,
+  stroke = "#FF2000",
+  duration = 6,
+}: Props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 74.9 149"
+      className={className}
+      aria-hidden="true"
+    >
+      <WirePathsGroup paths={leftWingPaths} stroke={stroke} duration={duration} startDelay={0} />
+    </svg>
+  );
+}
+
+/**
+ * Full firebird wireframe — both halves, drawing in sync.
+ */
+export function FirebirdLogoAnimated({
+  className,
+  stroke = "#FF2000",
+  duration = 6,
+}: Props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -110,41 +218,13 @@ export function FirebirdLogoAnimated({ className }: Props) {
       className={className}
       aria-hidden="true"
     >
-      <g
-        fill="none"
-        stroke="#FF2000"
-        strokeWidth="0.6"
-        strokeMiterlimit="10"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        {wirePaths.map((p, i) => {
-          const Tag = p.tag;
-          return (
-            <Tag
-              key={i}
-              {...p.attrs}
-              pathLength={1}
-              style={{
-                strokeDasharray: 1,
-                strokeDashoffset: 1,
-                animation: "firebird-draw 6s ease-in-out infinite",
-                animationDelay: `${(i % 14) * 0.18}s`,
-              }}
-            />
-          );
-        })}
-      </g>
-      <style>{`
-        @keyframes firebird-draw {
-          0%   { stroke-dashoffset: 1;  opacity: 0; }
-          12%  { opacity: 1; }
-          45%  { stroke-dashoffset: 0;  opacity: 1; }
-          60%  { stroke-dashoffset: 0;  opacity: 1; }
-          92%  { stroke-dashoffset: -1; opacity: 0.2; }
-          100% { stroke-dashoffset: -1; opacity: 0; }
-        }
-      `}</style>
+      <WirePathsGroup paths={rightWingPaths} stroke={stroke} duration={duration} startDelay={0} />
+      <WirePathsGroup
+        paths={leftWingPaths}
+        stroke={stroke}
+        duration={duration}
+        startDelay={0}
+      />
     </svg>
   );
 }

@@ -35,11 +35,17 @@ export function Hero() {
       <div className="absolute top-0 left-0 right-0 h-1 bg-[#FF2000]" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16 w-full text-center flex flex-col items-center">
-        <p className="text-[#FF2000] text-base md:text-lg font-bold tracking-[0.4em] uppercase mb-8">
+        <p
+          className="text-[#FF2000] text-base md:text-lg font-bold tracking-[0.4em] uppercase mb-8 hero-enter"
+          style={{ animationDelay: "2.2s" }}
+        >
           AI . Tech . Fire
         </p>
 
-        <h1 className="text-white text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight font-[family-name:var(--font-heading)] mb-8">
+        <h1
+          className="text-white text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight font-[family-name:var(--font-heading)] mb-8 hero-enter"
+          style={{ animationDelay: "2.5s" }}
+        >
           Build Intelligent
           <br />
           Systems That
@@ -47,7 +53,10 @@ export function Hero() {
           <span className="text-[#FF2000]">Scale.</span>
         </h1>
 
-        <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl">
+        <p
+          className="text-white/70 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl hero-enter"
+          style={{ animationDelay: "2.8s" }}
+        >
           Open-source AI analytics and bespoke LLM systems.
           <br />
           Engineered for companies that ship.
@@ -55,13 +64,17 @@ export function Hero() {
 
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-medium tracking-wide transition-colors mb-12 group"
+          className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm font-medium tracking-wide transition-colors mb-12 group hero-enter"
+          style={{ animationDelay: "3.0s" }}
         >
           Read our research &amp; field notes
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </Link>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div
+          className="flex flex-col sm:flex-row gap-4 justify-center hero-enter"
+          style={{ animationDelay: "3.2s" }}
+        >
           <Link
             href="/#products"
             className={cn(
@@ -83,11 +96,14 @@ export function Hero() {
         </div>
 
         {/* Stats row */}
-        <div className="mt-20 w-full flex flex-wrap justify-center gap-x-12 gap-y-8 border-t border-white/10 pt-10">
+        <div
+          className="mt-20 w-full flex flex-wrap justify-center gap-x-12 gap-y-8 border-t border-white/10 pt-10 hero-enter"
+          style={{ animationDelay: "3.5s" }}
+        >
           {[
             { value: "2023", label: "Founded" },
             { value: "20+", label: "AI Projects Delivered" },
-            { value: "2", label: "Live Products" },
+            { value: "10K+", label: "People Using Our Products" },
             { value: "$100M+", label: "Partner Firm Revenue" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
