@@ -82,39 +82,7 @@ const rightWingPaths: WirePath[] = [
 
 // Left half = right half mirrored across x = 74.9 (vertical center of viewBox).
 const MIRROR_AXIS = 74.9;
-
-function mirrorPoints(points: string): string {
-  return points
-    .split(/\s+/)
-    .filter(Boolean)
-    .reduce<string[]>((acc, val, i) => {
-      const num = parseFloat(val);
-      if (i % 2 === 0) {
-        // x coordinate — mirror it
-        acc.push((MIRROR_AXIS * 2 - num).toFixed(2));
-      } else {
-        acc.push(val);
-      }
-      return acc;
-    }, [])
-    .join(" ");
-}
-
-const leftWingPaths: WirePath[] = rightWingPaths.map((p) => {
-  if (p.tag === "polygon" || p.tag === "polyline") {
-    return { tag: p.tag, attrs: { points: mirrorPoints(p.attrs.points) } };
-  }
-  // For the single path element, hand-mirror by negating x deltas in the M and L commands.
-  // The path uses relative commands which makes pure-text mirroring fragile, so we render a
-  // simplified mirrored polygon that approximates the same beak region on the left side.
-  return {
-    tag: "polyline",
-    attrs: {
-      points:
-        "64.8 35.2 72.5 42.8 72.4 43.6 57.9 57.7 43.1 73 42.5 73.3 41.9 73 34.6 65.5 34.6 40.9 43.4 49.6 55.3 49.6 64.8 50.2",
-    },
-  };
-});
+const MIRROR_TRANSFORM = `translate(${MIRROR_AXIS * 2}, 0) scale(-1, 1)`;
 
 function WirePathsGroup({
   paths,
@@ -175,6 +143,7 @@ export function FirebirdHalfRight({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="74.9 0 75.1 149"
+      preserveAspectRatio="xMidYMid meet"
       className={className}
       aria-hidden="true"
     >
@@ -195,10 +164,13 @@ export function FirebirdHalfLeft({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 74.9 149"
+      preserveAspectRatio="xMidYMid meet"
       className={className}
       aria-hidden="true"
     >
-      <WirePathsGroup paths={leftWingPaths} stroke={stroke} duration={duration} startDelay={0} />
+      <g transform={MIRROR_TRANSFORM}>
+        <WirePathsGroup paths={rightWingPaths} stroke={stroke} duration={duration} startDelay={0} />
+      </g>
     </svg>
   );
 }
@@ -215,16 +187,14 @@ export function FirebirdLogoAnimated({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 150 149"
+      preserveAspectRatio="xMidYMid meet"
       className={className}
       aria-hidden="true"
     >
       <WirePathsGroup paths={rightWingPaths} stroke={stroke} duration={duration} startDelay={0} />
-      <WirePathsGroup
-        paths={leftWingPaths}
-        stroke={stroke}
-        duration={duration}
-        startDelay={0}
-      />
+      <g transform={MIRROR_TRANSFORM}>
+        <WirePathsGroup paths={rightWingPaths} stroke={stroke} duration={duration} startDelay={0} />
+      </g>
     </svg>
   );
 }

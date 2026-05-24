@@ -6,8 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import type { Post } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
 import { FirebirdHalfRight } from "@/components/FirebirdLogoAnimated";
@@ -43,9 +41,9 @@ export function BlogPreview({ posts }: BlogPreviewProps) {
         <FirebirdHalfRight className="w-full h-full" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex flex-col items-center md:flex-row md:items-end md:justify-between mb-16 text-center md:text-left gap-6">
           <div>
             <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">
               Insights
@@ -53,11 +51,11 @@ export function BlogPreview({ posts }: BlogPreviewProps) {
             <h2 className="text-white text-4xl md:text-5xl font-bold font-[family-name:var(--font-heading)] tracking-tight">
               Latest Posts
             </h2>
-            <div className="mt-4 h-1 w-16 bg-[#FF2000]" />
+            <div className="mt-4 h-1 w-16 bg-[#FF2000] mx-auto md:mx-0" />
           </div>
           <Link
             href="/blog"
-            className="hidden md:flex items-center gap-2 text-white/50 hover:text-white text-sm font-medium transition-colors group"
+            className="flex items-center gap-2 text-white/50 hover:text-white text-sm font-medium transition-colors group"
           >
             View all posts
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -109,21 +107,8 @@ export function BlogPreview({ posts }: BlogPreviewProps) {
           ))}
         </div>
 
-        {/* Mobile — view all */}
-        <div className="md:hidden mb-16">
-          <Link
-            href="/blog"
-            className={cn(
-              buttonVariants({ variant: "outline" }),
-              "w-full rounded-none border-white/20 text-white hover:bg-white/10 font-bold uppercase tracking-widest text-sm justify-center"
-            )}
-          >
-            View All Posts
-          </Link>
-        </div>
-
         {/* Newsletter signup */}
-        <div className="border border-white/10 p-10 md:p-14 flex flex-col md:flex-row items-start md:items-center gap-8">
+        <div className="border border-white/10 p-8 sm:p-10 md:p-14 flex flex-col md:flex-row items-center md:items-center gap-8 text-center md:text-left">
           <div className="flex-1">
             <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-2">
               Newsletter

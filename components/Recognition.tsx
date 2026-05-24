@@ -108,16 +108,16 @@ export function Recognition() {
         <FirebirdHalfLeft className="w-full h-full" stroke="#525252" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6">
-        <div className="mb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-16 text-center md:text-left">
           <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">
             Awards &amp; Recognition
           </p>
           <h2 className="text-black text-4xl md:text-5xl font-bold font-[family-name:var(--font-heading)] tracking-tight">
             Backed by the Industry
           </h2>
-          <div className="mt-4 h-1 w-16 bg-[#FF2000]" />
-          <p className="text-black/50 text-lg leading-relaxed max-w-2xl mt-6">
+          <div className="mt-4 h-1 w-16 bg-[#FF2000] mx-auto md:mx-0" />
+          <p className="text-black/50 text-lg leading-relaxed max-w-2xl mt-6 mx-auto md:mx-0">
             Recognition from the AI community for the work we do — and for the open-source
             tools we ship along the way.
           </p>

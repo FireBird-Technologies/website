@@ -1,24 +1,26 @@
-// Generates `public/firebird-wireframe.gif` by rasterizing N SVG frames
-// of the firebird wireframe at varying draw-progress points, then encoding
-// the frame sequence into a GIF.
+// Generates firebird wireframe GIFs by rasterizing SVG frames and encoding
+// them with gifenc. Matches the hero animation: lines draw in, hold,
+// dissolve, then redraw in a seamless loop.
 //
-// Run with: node scripts/generate-firebird-gif.mjs
+// Run: npm run gen:firebird-gif
+//
+// Outputs:
+//   public/firebird-wireframe.gif          (800px — web / OG)
+//   public/firebird-wireframe-hd.gif       (1200px — LinkedIn, decks, etc.)
 
 import { Resvg } from "@resvg/resvg-js";
 import gifenc from "gifenc";
 const { GIFEncoder, quantize, applyPalette } = gifenc;
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT_PATH = resolve(__dirname, "..", "public", "firebird-wireframe.gif");
+const PUBLIC_DIR = resolve(__dirname, "..", "public");
 
 const RED = "#FF2000";
 const BG = "#000000";
-const SIZE = 800; // px square output
 
-// Same wire paths as the React component, kept in sync manually.
 const rightWingPaths = [
   { tag: "polygon", points: "85 27.3 85 35.5 85.3 35.5 100.6 20.4 100.6 35 110.5 35 110.9 34.8 110.9 2.7" },
   { tag: "polygon", points: "116.1 40.6 116.1 49.3 130.6 49.6 115.9 64.7 123.5 65.5 148.1 39.6 116.4 39.6" },
@@ -37,6 +39,7 @@ const rightWingPaths = [
 ];
 
 const MIRROR_AXIS = 74.9;
+
 function mirrorPoints(points) {
   return points
     .split(/\s+/)
@@ -49,7 +52,6 @@ const leftWingPaths = rightWingPaths.map((p) => {
   if (p.tag === "polygon" || p.tag === "polyline") {
     return { tag: p.tag, points: mirrorPoints(p.points) };
   }
-  // mirrored beak approximation
   return {
     tag: "polyline",
     points:
@@ -59,124 +61,135 @@ const leftWingPaths = rightWingPaths.map((p) => {
 
 const allPaths = [...rightWingPaths, ...leftWingPaths];
 
-/**
- * Build an SVG string showing the wireframe at the given progress (0 → 1).
- * Each path is normalized via pathLength=1 and progressively revealed using
- * stroke-dasharray / stroke-dashoffset. Paths are staggered so the bird
- * assembles itself line by line over the course of the animation.
- *
- * progress in [0, 1.2]:
- *   0     → fully invisible
- *   1     → fully drawn
- *   1→1.2 → "hold" tail (kept fully drawn briefly so the GIF doesn't snap reset)
- */
-function buildSvg(progress) {
+function buildSvg(progress, size) {
   const N = allPaths.length;
-  const stagger = 0.025; // fraction of total progress between successive paths
+  const stagger = 0.025;
   const drawWindow = 1 - stagger * (N - 1);
 
   const paths = allPaths.map((p, i) => {
     const startAt = i * stagger;
     const endAt = startAt + drawWindow;
-    // Clamp progress relative to this path's window.
     const local =
       progress <= startAt ? 0 : progress >= endAt ? 1 : (progress - startAt) / (endAt - startAt);
-    const dashOffset = 1 - local; // 1 (hidden) → 0 (drawn)
+    const dashOffset = 1 - local;
     const opacity = local < 0.02 ? 0 : 1;
 
     const common = `pathLength="1" stroke-dasharray="1" stroke-dashoffset="${dashOffset.toFixed(
       3
     )}" opacity="${opacity}"`;
 
-    if (p.tag === "polygon") {
-      return `<polygon points="${p.points}" ${common} />`;
-    }
-    if (p.tag === "polyline") {
-      return `<polyline points="${p.points}" ${common} />`;
-    }
+    if (p.tag === "polygon") return `<polygon points="${p.points}" ${common} />`;
+    if (p.tag === "polyline") return `<polyline points="${p.points}" ${common} />`;
     return `<path d="${p.d}" ${common} />`;
   });
 
+  // Soft red glow behind the bird (matches hero aesthetic)
+  const glow = `
+    <defs>
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="${RED}" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="${RED}" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <ellipse cx="75" cy="74.5" rx="70" ry="68" fill="url(#glow)"/>
+  `;
+
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 149" width="${SIZE}" height="${SIZE}">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 149" width="${size}" height="${size}">
   <rect width="100%" height="100%" fill="${BG}" />
+  ${glow}
   <g fill="none" stroke="${RED}" stroke-width="0.55" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10">
     ${paths.join("\n    ")}
   </g>
 </svg>`;
 }
 
-function svgToRgba(svgString) {
+function svgToRgba(svgString, size) {
   const resvg = new Resvg(svgString, {
-    fitTo: { mode: "width", value: SIZE },
+    fitTo: { mode: "width", value: size },
     background: BG,
   });
   const pngData = resvg.render();
-  return {
-    pixels: pngData.pixels, // Uint8Array RGBA
-    width: pngData.width,
-    height: pngData.height,
-  };
+  return { pixels: pngData.pixels, width: pngData.width, height: pngData.height };
 }
 
-function main() {
-  mkdirSync(dirname(OUT_PATH), { recursive: true });
+function encodeGif({ size, outPath, fps, paletteSize }) {
+  const holdFrames = Math.round(0.3 * fps); // brief black before draw
+  const drawFrames = Math.round(2.0 * fps);
+  const dissolveFrames = Math.round(0.8 * fps);
+  const redrawFrames = Math.round(1.5 * fps);
+  const tailFrames = Math.round(0.5 * fps);
+  const totalFrames = holdFrames + drawFrames + Math.round(1.0 * fps) + dissolveFrames + redrawFrames + tailFrames;
 
-  const FPS = 24;
-  // Frame sequence: start at FULLY DRAWN (so social previews that show only
-  // the first frame look great), then play one full draw/redraw loop.
-  //   - hold:     fully drawn (so first frame is "perfect" for thumbnails)
-  //   - dissolve: drawn → invisible
-  //   - redraw:   invisible → drawn (returns to first-frame state for loop)
-  const holdSeconds = 0.5;
-  const dissolveSeconds = 1.0;
-  const redrawSeconds = 1.5;
-  const tailSeconds = 0.3; // little pause at end before GIF loops
+  console.log(`\n→ ${outPath}`);
+  console.log(`  ${totalFrames} frames @ ${fps}fps, ${size}px, ${paletteSize}-color palette`);
 
-  const holdFrames = Math.round(holdSeconds * FPS);
-  const dissolveFrames = Math.round(dissolveSeconds * FPS);
-  const redrawFrames = Math.round(redrawSeconds * FPS);
-  const tailFrames = Math.round(tailSeconds * FPS);
-  const totalFrames = holdFrames + dissolveFrames + redrawFrames + tailFrames;
-
-  console.log(`Encoding ${totalFrames} frames @ ${FPS}fps (${SIZE}x${SIZE})...`);
   const gif = GIFEncoder();
 
   for (let f = 0; f < totalFrames; f++) {
+    const holdEnd = holdFrames;
+    const drawEnd = holdEnd + drawFrames;
+    const holdDrawEnd = drawEnd + Math.round(1.0 * fps);
+    const dissolveEnd = holdDrawEnd + dissolveFrames;
+    const redrawEnd = dissolveEnd + redrawFrames;
+
     let progress;
-    if (f < holdFrames) {
-      progress = 1; // fully drawn
-    } else if (f < holdFrames + dissolveFrames) {
-      const t = (f - holdFrames) / (dissolveFrames - 1);
-      progress = 1 - t; // 1 → 0 (dissolve)
-    } else if (f < holdFrames + dissolveFrames + redrawFrames) {
-      const t = (f - holdFrames - dissolveFrames) / (redrawFrames - 1);
-      progress = t; // 0 → 1 (redraw)
-    } else {
-      progress = 1; // tail hold
-    }
+    if (f < holdEnd) progress = 0;
+    else if (f < drawEnd) progress = (f - holdEnd) / (drawFrames - 1);
+    else if (f < holdDrawEnd) progress = 1;
+    else if (f < dissolveEnd) progress = 1 - (f - holdDrawEnd) / (dissolveFrames - 1);
+    else if (f < redrawEnd) progress = (f - dissolveEnd) / (redrawFrames - 1);
+    else progress = 1;
 
-    const svgString = buildSvg(progress);
-    const { pixels, width, height } = svgToRgba(svgString);
+    const svgString = buildSvg(progress, size);
+    const { pixels, width, height } = svgToRgba(svgString, size);
 
-    const palette = quantize(pixels, 16, { format: "rgba4444" });
+    const palette = quantize(pixels, paletteSize, { format: "rgba4444" });
     const indexed = applyPalette(pixels, palette, "rgba4444");
 
     gif.writeFrame(indexed, width, height, {
       palette,
-      delay: Math.round(1000 / FPS),
+      delay: Math.round(1000 / fps),
     });
 
-    if ((f + 1) % 8 === 0) {
-      process.stdout.write(`  frame ${f + 1}/${totalFrames}\r`);
-    }
+    if ((f + 1) % 12 === 0) process.stdout.write(`  frame ${f + 1}/${totalFrames}\r`);
   }
 
   gif.finish();
   const bytes = gif.bytes();
-  writeFileSync(OUT_PATH, bytes);
-  const kb = (bytes.length / 1024).toFixed(1);
-  console.log(`\nWrote ${OUT_PATH} (${kb} KB)`);
+  writeFileSync(outPath, bytes);
+  console.log(`  done — ${(bytes.length / 1024).toFixed(1)} KB`);
+  return outPath;
+}
+
+function main() {
+  mkdirSync(PUBLIC_DIR, { recursive: true });
+
+  const outputs = [
+    { size: 800, outPath: resolve(PUBLIC_DIR, "firebird-wireframe.gif"), fps: 24, paletteSize: 32 },
+    { size: 1200, outPath: resolve(PUBLIC_DIR, "firebird-wireframe-hd.gif"), fps: 24, paletteSize: 48 },
+  ];
+
+  // Also drop HD copy in project videos/ folder for easy access
+  const videosDir = resolve(__dirname, "..", "..", "videos");
+  mkdirSync(videosDir, { recursive: true });
+
+  console.log("Generating firebird wireframe GIFs…");
+
+  for (const cfg of outputs) {
+    encodeGif(cfg);
+  }
+
+  // Copy HD version to videos folder
+  const hdSrc = resolve(PUBLIC_DIR, "firebird-wireframe-hd.gif");
+  const hdDest = resolve(videosDir, "firebird-wireframe.gif");
+  const hdBytes = readFileSync(hdSrc);
+  writeFileSync(hdDest, hdBytes);
+  console.log(`\nCopied HD GIF → ${hdDest}`);
+  console.log("\nUse these files:");
+  console.log("  website/public/firebird-wireframe.gif     (800px, web)");
+  console.log("  website/public/firebird-wireframe-hd.gif  (1200px, social/decks)");
+  console.log("  videos/firebird-wireframe.gif             (1200px copy)");
 }
 
 main();

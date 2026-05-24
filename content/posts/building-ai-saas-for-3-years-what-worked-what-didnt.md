@@ -29,9 +29,7 @@ Watch the video version of this post:
 
 1. [AutoAnalyst.ai](https://autoanalyst.ai/) — An AI data scientist platform. The hosted version has served over 1.8K users and 5K requests analysis performed. It has also been deployed inside other companies’ infrastructure, bringing in hundreds of thousands in service revenue. [The project is open source under the MIT license with around 670 stars](https://github.com/FireBird-Technologies/Auto-Analyst).
 2. [Blog2Video](https://blog2video.app/)— A text-to-video content automation SaaS. Launched in February 2026 and already at about $1.3K in revenue with fast growth. .
-3. [AutoDash](https://autodash.art/)— A simplified AI visualization tool. Focused more on designing visualizations than autoanalyst.
-4. [AutoForm](https://autoform.ink/) — An AI MicroSaaS form builder we use internally to capture leads.
-5. SQLTrainerAI — An AI simulator designed to help people learn SQL.
+3. SQLTrainerAI — An AI simulator designed to help people learn SQL.
 
 **Client Projects**:
 

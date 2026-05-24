@@ -120,9 +120,9 @@ export function Testimonials() {
         <FirebirdHalfRight className="w-full h-full" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section header */}
-        <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div className="mb-16 flex flex-col items-center md:items-end md:flex-row md:justify-between gap-6 text-center md:text-left">
           <div>
             <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">
               Testimonials
@@ -130,7 +130,7 @@ export function Testimonials() {
             <h2 className="text-white text-4xl md:text-5xl font-bold font-[family-name:var(--font-heading)] tracking-tight">
               What Our Clients Say
             </h2>
-            <div className="mt-4 h-1 w-16 bg-[#FF2000]" />
+            <div className="mt-4 h-1 w-16 bg-[#FF2000] mx-auto md:mx-0" />
           </div>
           <p className="text-white/50 text-sm font-medium tracking-wider uppercase">
             <span className="text-white">{String(activeIndex + 1).padStart(2, "0")}</span>
@@ -148,22 +148,22 @@ export function Testimonials() {
               {testimonials.map((t) => (
                 <article
                   key={t.name}
-                  className="w-full shrink-0 grid lg:grid-cols-[1fr_320px] gap-12 lg:gap-16 items-center"
+                  className="min-w-full flex-[0_0_100%] shrink-0 grid lg:grid-cols-[1fr_320px] gap-12 lg:gap-16 items-center"
                 >
                   {/* Quote side */}
-                  <div className="relative">
+                  <div className="relative text-center lg:text-left">
                     <Quote
-                      className="absolute -top-8 -left-4 h-20 w-20 text-[#FF2000] opacity-20 -scale-x-100"
+                      className="absolute -top-8 left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 lg:-left-4 h-16 w-16 lg:h-20 lg:w-20 text-[#FF2000] opacity-20 -scale-x-100"
                       aria-hidden="true"
                       strokeWidth={1.25}
                       fill="currentColor"
                     />
-                    <p className="relative text-white text-xl md:text-2xl leading-[1.6] font-light pl-2">
+                    <p className="relative text-white text-lg sm:text-xl md:text-2xl leading-[1.6] font-light px-2 lg:pl-2">
                       {t.quote}
                     </p>
 
-                    <div className="mt-10 flex items-center gap-5">
-                      <div className="h-px w-12 bg-[#FF2000]" />
+                    <div className="mt-10 flex flex-col items-center lg:flex-row lg:items-center gap-4 lg:gap-5">
+                      <div className="h-px w-12 bg-[#FF2000] hidden lg:block" />
                       <div>
                         <p className="text-white font-bold text-lg font-[family-name:var(--font-heading)] tracking-tight">
                           {t.name}

@@ -31,10 +31,10 @@ export function Footer() {
         <FirebirdHalfRight className="w-full h-full" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16 text-center md:text-left">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 md:col-span-1 flex flex-col items-center md:items-start">
             <Link href="/" className="flex items-center gap-3 mb-4">
               <Image
                 src="/logo-sm.jpg"

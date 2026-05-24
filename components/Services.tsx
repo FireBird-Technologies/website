@@ -40,16 +40,16 @@ export function Services() {
         <FirebirdHalfLeft className="w-full h-full" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section header */}
-        <div className="mb-16">
+        <div className="mb-16 text-center md:text-left">
           <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">
             What We Do
           </p>
           <h2 className="text-white text-4xl md:text-5xl font-bold font-[family-name:var(--font-heading)] tracking-tight">
             Our Services
           </h2>
-          <div className="mt-4 h-1 w-16 bg-[#FF2000]" />
+          <div className="mt-4 h-1 w-16 bg-[#FF2000] mx-auto md:mx-0" />
         </div>
 
         {/* Service grid */}

@@ -53,15 +53,15 @@ export function Products() {
         <FirebirdHalfRight className="w-full h-full" stroke="#525252" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6">
-        <div className="mb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mb-16 text-center md:text-left">
           <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">
             What We Ship
           </p>
           <h2 className="text-black text-4xl md:text-5xl font-bold font-[family-name:var(--font-heading)] tracking-tight">
             Our Products
           </h2>
-          <div className="mt-4 h-1 w-16 bg-[#FF2000]" />
+          <div className="mt-4 h-1 w-16 bg-[#FF2000] mx-auto md:mx-0" />
         </div>
 
         <div className="grid md:grid-cols-2 gap-0 border border-black">

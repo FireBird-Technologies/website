@@ -39,10 +39,10 @@ export function ContactForm() {
         <FirebirdHalfRight className="w-full h-full" stroke="#525252" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid md:grid-cols-2 gap-16 items-start">
           {/* Left column */}
-          <div>
+          <div className="text-center md:text-left">
             <p className="text-[#FF2000] text-xs font-bold tracking-[0.3em] uppercase mb-3">
               Get In Touch
             </p>
@@ -51,20 +51,20 @@ export function ContactForm() {
               <br />
               Something Great.
             </h2>
-            <div className="h-1 w-16 bg-[#FF2000] mb-8" />
+            <div className="h-1 w-16 bg-[#FF2000] mb-8 mx-auto md:mx-0" />
             <p className="text-black/60 leading-relaxed text-lg">
               Whether you&apos;re exploring AI for your business or have a specific project in mind,
               we&apos;d love to talk. We typically respond within 24 hours.
             </p>
 
-            <div className="mt-10 space-y-4">
+            <div className="mt-10 space-y-4 flex flex-col items-center md:items-start">
               {[
                 { label: "Email", value: "arslan@firebird-technologies.com" },
                 { label: "Website", value: "firebird-technologies.com" },
                 { label: "Availability", value: "Open to new projects" },
               ].map((item) => (
-                <div key={item.label} className="flex gap-6 items-baseline">
-                  <span className="text-xs font-bold uppercase tracking-widest text-black/30 w-24 flex-shrink-0">
+                <div key={item.label} className="flex flex-col md:flex-row gap-1 md:gap-6 md:items-baseline items-center text-center md:text-left">
+                  <span className="text-xs font-bold uppercase tracking-widest text-black/30 md:w-24 flex-shrink-0">
                     {item.label}
                   </span>
                   <span className="text-black font-medium">{item.value}</span>
@@ -92,7 +92,7 @@ export function ContactForm() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-xs font-bold uppercase tracking-widest text-black/50">
                       Name *

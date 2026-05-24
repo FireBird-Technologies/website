@@ -78,12 +78,12 @@ export function ClientsPartners() {
       </div>
 
       {/* Subtle label that ties into the hero */}
-      <div className="relative max-w-7xl mx-auto px-6 mb-10">
-        <div className="flex items-center gap-4">
-          <p className="text-white/40 text-[11px] font-bold tracking-[0.3em] uppercase whitespace-nowrap">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 mb-10 text-center md:text-left">
+        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
+          <p className="text-white/40 text-[10px] sm:text-[11px] font-bold tracking-[0.2em] sm:tracking-[0.3em] uppercase">
             Our Clients &amp; Partner Affiliations
           </p>
-          <div className="h-px flex-1 bg-white/10" />
+          <div className="hidden md:block h-px flex-1 bg-white/10" />
         </div>
       </div>
 

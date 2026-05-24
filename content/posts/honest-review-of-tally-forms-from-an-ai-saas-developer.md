@@ -23,12 +23,6 @@ Video version of this post made using [https://blog2video.app](https://blog2vide
 <iframe src="https://www.youtube-nocookie.com/embed/2UuIyVdzPlU" title="YouTube video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0"></iframe>
 </div>
 
-> *Generate Forms, Capture leads in seconds using AI:*
->
-> <div class="cta-inline">
-> <a class="cta-button cta-primary" href="https://autoform.ink/" target="_blank" rel="noopener noreferrer">AI First Forms →</a>
-> </div>
-
 ## What is Tally?
 
 ![](https://substack-post-media.s3.amazonaws.com/public/images/963907f6-980a-4ec4-a65d-dfa752abeaba_1050x1118.png)
@@ -65,12 +59,6 @@ Question wise drop-off analytics
 
 There are other useful features like custom domains, password protected forms and emails for submissions.
 
-> *Now you can create forms instantly using AI!*
->
-> <div class="cta-inline">
-> <a class="cta-button cta-primary" href="https://autoform.ink/" target="_blank" rel="noopener noreferrer">AI First Forms →</a>
-> </div>
-
 ## What I like about Tally?
 
 1. **Design**: It is what really sets Tally apart. It is not just about what the product can do but how it looks. Their forms are clean and modern, and design has always been one of their biggest strengths.
@@ -95,13 +83,6 @@ This section elaborates on the above point on how Tally AI is lacking:
 2. **AI x Analytics**: AI is a great analyst to work with. I am sure many users take form responses and give them to claude to analyze or build a custom dashboard. I think Tally could potentially integrate this in their forms.
 
 Thank you for reading, please follow me and FirebirdTech for more on AI and products.
-
-> *Try AI First Forms:*
->
-> <div class="cta-inline">
-> <a class="cta-button cta-primary" href="https://autoform.ink/" target="_blank" rel="noopener noreferrer">AI First Forms →</a>
-> </div>
-
 
 ---
 
