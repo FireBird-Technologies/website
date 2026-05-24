@@ -40,12 +40,22 @@ export const metadata: Metadata = {
     siteName: "FireBird Technologies",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/firebird-wireframe.gif",
+        width: 800,
+        height: 800,
+        alt: "FireBird Technologies wireframe emblem",
+        type: "image/gif",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "FireBird Technologies — AI. Tech. Fire.",
     description:
       "Open-source AI analytics and bespoke LLM systems. Engineered for companies that ship.",
+    images: ["/firebird-wireframe.gif"],
   },
 };
 
